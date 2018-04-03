@@ -1,0 +1,14 @@
+#Dockerfile
+
+FROM mariadb
+
+MAINTAINER Najar <denis.devel@gmail.com> 
+
+ADD ./joomla.sql /docker-entrypoint-initdb.d
+
+COPY mysqld.conf /etc/mysql/mysql.conf.d/mysqld.cnf
+
+ENV MYSQL_DATABASE=joomla_db \
+    MYSQL_ROOT_PASSWORD=123
+
+EXPOSE 3306

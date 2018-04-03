@@ -1,0 +1,18 @@
+#Dockerfile
+
+FROM eboraas/apache-php
+
+MAINTAINER Najar <denis.devel@gmail.com> 
+
+COPY ./joomla.conf /etc/apache2/sites-available/joomla.conf
+
+ADD ./joomla /var/www/joomla
+
+EXPOSE 80
+
+WORKDIR /etc/apache2/sites-available
+
+RUN chown -R www-data:www-data /var/www/joomla && chmod 755 /var/www/joomla && a2dissite 000-default.conf && a2ensite joomla
+
+
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]

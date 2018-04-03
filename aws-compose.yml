@@ -1,0 +1,29 @@
+   joomla-mariadb:
+     image: najar/joomla-mariadb
+     cpu_shares: 100
+     mem_limit: 262144000
+     ports:
+       - "3306:3306"
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: 123
+       MYSQL_DATABASE: joomla_db
+       MYSQL_USER: joomla
+       MYSQL_PASSWORD: 123
+
+   joomla-apache-php:
+     image: najar/joomla-apache-php
+     cpu_shares: 100
+     mem_limit: 262144000
+     volumes:
+             #       - /var/www/joomla:/var/www/joomla
+       - /var/log/apache2:/var/log/apache2
+     ports:
+       - "80:80"
+     links:
+       - joomla-mariadb
+     restart: always
+     environment:
+       JOOMLA_DB_HOST: db:3306
+       JOOMLA_DB_USER: joomla
+       JOOMLA_DB_PASSWORD: 123

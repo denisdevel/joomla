@@ -1,0 +1,38 @@
+version: '3.3'
+
+services:
+   joomla-3.8-mariadb:
+     image: najar/joomla-3.8-mariadb
+     build:
+       context: .
+       dockerfile: docker-db
+       #     volumes:
+             #       - /var/lib/mysql:/var/lib/mysql
+     ports:
+       - "3306:3306"
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: 123
+       MYSQL_DATABASE: joomla_db
+       MYSQL_USER: joomla
+       MYSQL_PASSWORD: 123
+
+   joomla-3.8-apache-php:
+     depends_on:
+       - joomla-3.8-mariadb
+     image: najar/joomla-3.8-apache-php
+     build:
+       context: .
+       dockerfile: docker-apache-php
+     volumes:
+             #       - /var/www/joomla:/var/www/joomla
+       - /var/log/apache2:/var/log/apache2
+     ports:
+       - "8000:80"
+     links:
+       - joomla-3.8-mariadb
+     restart: always
+     environment:
+       JOOMLA_DB_HOST: db:3306
+       JOOMLA_DB_USER: joomla
+       JOOMLA_DB_PASSWORD: 123
